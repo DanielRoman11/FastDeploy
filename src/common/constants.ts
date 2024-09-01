@@ -1,0 +1,7 @@
+export const constants = {
+  DATA_SOURCE: 'DATA_SOURCE',
+  RECIPE: 'RECIPE_REPO',
+  INGREDIENTS: 'INGREDIENTS_REPO',
+  TOOLS: 'TOOLS_REPO',
+  STEPS: 'STEPS_REPO',
+};
