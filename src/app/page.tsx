@@ -1,47 +1,423 @@
-"use client"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+"use client";
+
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const queryClient = new QueryClient()
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useRecipe } from "@/app/hooks/useRecipe";
+import RecipeTable from "@/components/recipe/RecipeTable";
+import {
+	InputOTP,
+	InputOTPGroup,
+	InputOTPSeparator,
+	InputOTPSlot,
+} from "@/components/ui/input-otp";
+import RecipeItemForm from "@/components/recipe/RecipeItemForm";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { useFieldArray } from "react-hook-form";
+
+export const queryClient = new QueryClient();
 
 export default function Home() {
+	const { form, onSubmit, createMutation, recipes } = useRecipe();
+
+	//? INGREDIENTS FORM STATES
+	const { fields: fieldsIngredients, append: appendIngredients } =
+		useFieldArray({
+			control: form.control,
+			name: "ingredients",
+		});
+	function handleClickIngredientItemForm() {
+		appendIngredients({ name: "" }, { shouldFocus: false });
+	}
+
+	//? TOOLS FORM STATE
+	const { fields: fieldsTools, append: appendTools } = useFieldArray({
+		control: form.control,
+		name: "tools",
+	});
+	function handleClickToolsItemForm() {
+		appendTools({ name: "" }, { shouldFocus: false });
+	}
+
+	//? STEPS FORM STATE
+	const { fields: fieldsSteps, append: appendSteps } = useFieldArray({
+		control: form.control,
+		name: "steps",
+	});
+	function handleClickStepsItemForm() {
+		appendSteps({ name: "" }, { shouldFocus: false });
+	}
+
 	return (
 		<QueryClientProvider client={queryClient}>
 			<main>
-				<section className="p-5">
-					<Card x-chunk="dashboard-07-chunk-0">
-						<CardHeader>
-							<CardTitle>Product Details</CardTitle>
-							<CardDescription>
-								Lipsum dolor sit amet, consectetur adipiscing elit
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<div className="grid gap-6">
-								<div className="grid gap-3">
-									<Label htmlFor="name">Name</Label>
-									<Input
-										id="name"
-										type="text"
-										className="w-full"
-										defaultValue="Gamer Gear Pro Controller"
-									/>
-								</div>
-								<div className="grid gap-3">
-									<Label htmlFor="description">Description</Label>
-									<Textarea
-										id="description"
-										defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies ultricies, nunc nisl ultricies nunc, nec ultricies nunc nisl nec nunc."
-										className="min-h-32"
-									/>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
-				</section>
+				<Tabs defaultValue="recipe_form">
+					<TabsList className="w-full flex justify-center items-center mx-auto">
+						<TabsTrigger value="recipes">All Recipes</TabsTrigger>
+						<TabsTrigger value="recipe_form">Create New Recipe</TabsTrigger>
+					</TabsList>
+					<TabsContent value="recipes">
+						<RecipeTable recipes={recipes} />
+					</TabsContent>
+					<TabsContent value="recipe_form">
+						<Form {...form}>
+							<form
+								onSubmit={form.handleSubmit(onSubmit)}
+								id="recipeForm"
+								className="*:my-4 *:mx-2"
+							>
+								{/* //* Name, Description and Type */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Recipe Details</CardTitle>
+										<CardDescription>
+											Write all the details of your recipe.
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<div className="grid gap-6 *:gap-3">
+											<FormField
+												control={form.control}
+												name="name"
+												render={({ field }) => (
+													<FormItem>
+														<FormLabel htmlFor={field.name}>
+															What's the name of your recipe?
+														</FormLabel>
+														<FormControl>
+															<Input
+																{...field}
+																name={field.name}
+																id={field.name}
+																className="w-full"
+																placeholder="Carrot Cake, Sangria, etc... "
+															/>
+														</FormControl>
+														<FormMessage />
+													</FormItem>
+												)}
+											></FormField>
+											<div>
+												<FormField
+													control={form.control}
+													name="type"
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>
+																What's the type of food your recipe is?
+															</FormLabel>
+															<FormControl>
+																<Input
+																	{...field}
+																	name={field.name}
+																	type="text"
+																	className="w-full"
+																	placeholder="Ex. Dessert, Breakfast, etc..."
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												></FormField>
+											</div>
+											<div>
+												<FormField
+													control={form.control}
+													name="description"
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>
+																You can add a description, but its not
+																mandatory.
+															</FormLabel>
+															<FormControl>
+																<Textarea
+																	{...field}
+																	name={field.name}
+																	className="min-h-32"
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												></FormField>
+											</div>
+										</div>
+									</CardContent>
+								</Card>
+								{/* //* Preparation and Cooking Time */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Time Preparation</CardTitle>
+										<CardDescription>
+											Write your times of preparation and cooking for your
+											recipe, remember that all time values are mandatory.
+										</CardDescription>
+										<CardDescription>
+											All time entries must use the following scheme HH:MM:SS
+										</CardDescription>
+									</CardHeader>
+									<CardContent className="*:py-4">
+										<div>
+											<FormField
+												control={form.control}
+												name="cooking_time"
+												render={({ field }) => (
+													<FormItem>
+														<FormLabel>Cooking Time</FormLabel>
+														<FormControl>
+															<InputOTP
+																maxLength={6}
+																className="w-full"
+																{...field}
+															>
+																<p className="text-xs">HH</p>
+																<InputOTPGroup>
+																	<InputOTPSlot index={0} />
+																	<InputOTPSlot index={1} />
+																</InputOTPGroup>
+																<InputOTPSeparator />
+																<p className="text-xs">MM</p>
+																<InputOTPGroup>
+																	<InputOTPSlot index={2} />
+																	<InputOTPSlot index={3} />
+																</InputOTPGroup>
+																<InputOTPSeparator />
+																<p className="text-xs">SS</p>
+																<InputOTPGroup>
+																	<InputOTPSlot index={4} />
+																	<InputOTPSlot index={5} />
+																</InputOTPGroup>
+															</InputOTP>
+														</FormControl>
+														<FormMessage />
+													</FormItem>
+												)}
+											></FormField>
+										</div>
+										<div>
+											<FormField
+												control={form.control}
+												name="preparation_time"
+												render={({ field }) => (
+													<FormItem>
+														<FormLabel>Preparation Time</FormLabel>
+														<FormControl>
+															<InputOTP
+																maxLength={6}
+																className="w-full"
+																{...field}
+															>
+																<p className="text-xs">HH</p>
+																<InputOTPGroup className="relative">
+																	<InputOTPSlot index={0} />
+																	<InputOTPSlot index={1} />
+																</InputOTPGroup>
+																<InputOTPSeparator />
+																<p className="text-xs">MM</p>
+																<InputOTPGroup>
+																	<InputOTPSlot index={2} />
+																	<InputOTPSlot index={3} />
+																</InputOTPGroup>
+																<InputOTPSeparator />
+																<p className="text-xs">SS</p>
+																<InputOTPGroup>
+																	<InputOTPSlot index={4} />
+																	<InputOTPSlot index={5} />
+																</InputOTPGroup>
+															</InputOTP>
+														</FormControl>
+														<FormMessage />
+													</FormItem>
+												)}
+											/>
+										</div>
+									</CardContent>
+								</Card>
+								{/* //* Ingredients, Tools, Steps */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Content Index</CardTitle>
+										<CardDescription>
+											Here is where you wirte the content of your recipe,
+											writing all the ingredients, tools and steps to follow for
+											users to create your recipe.
+										</CardDescription>
+									</CardHeader>
+									<CardContent className="space-y-4">
+										{/* //*: INGREDIENTS FORM */}
+										<section>
+											<CardTitle className="text-lg">Ingredients</CardTitle>
+											<CardDescription className="pt-1">
+												Select all the ingredients you need.
+											</CardDescription>
+											<RecipeItemForm
+												label="Ingredient"
+												form={form}
+												handleClickItemForm={handleClickIngredientItemForm}
+												rows={fieldsIngredients}
+											/>
+										</section>
+										{/* //*: TOOLS FORM */}
+										<section>
+											<CardTitle className="text-lg">Tools</CardTitle>
+											<CardDescription className="pt-1">
+												Select all the tools you need.
+											</CardDescription>
+											<RecipeItemForm
+												label="Tools"
+												form={form}
+												handleClickItemForm={handleClickToolsItemForm}
+												rows={fieldsTools}
+											/>
+										</section>
+										{/* //*: STEPS FORM */}
+										<section>
+											<CardTitle className="text-lg">Steps</CardTitle>
+											<CardDescription className="pt-1">
+												Select all the steps you need.
+											</CardDescription>
+											<RecipeItemForm
+												label="Steps"
+												form={form}
+												handleClickItemForm={handleClickStepsItemForm}
+												rows={fieldsSteps}
+											/>
+										</section>
+									</CardContent>
+								</Card>
+								{/* //* Calories, Stimated Price, Rating */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Information</CardTitle>
+										<CardDescription>
+											Write some relevant information about your recipe.
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<Table>
+											<TableHeader>
+												<TableRow>
+													<TableHead>Calories</TableHead>
+													<TableHead>Stimated Price</TableHead>
+													<TableHead>Rating</TableHead>
+												</TableRow>
+											</TableHeader>
+											<TableBody>
+												<TableRow>
+													<TableCell>
+														<FormField
+															control={form.control}
+															name="calories"
+															render={({ field }) => (
+																<FormItem>
+																	<FormControl>
+																		<Input
+																			{...field}
+																			id={field.name}
+																			type="text"
+																			className="w-full"
+																		/>
+																	</FormControl>
+																	<FormMessage />
+																</FormItem>
+															)}
+														></FormField>
+													</TableCell>
+													<TableCell>
+														<FormField
+															control={form.control}
+															name="stimated_price"
+															render={({ field }) => (
+																<FormItem>
+																	<FormControl>
+																		<Input
+																			{...field}
+																			id={field.name}
+																			type="text"
+																			className="w-full"
+																		/>
+																	</FormControl>
+																	<FormMessage />
+																</FormItem>
+															)}
+														></FormField>
+													</TableCell>
+													<TableCell>
+														<FormField
+															control={form.control}
+															name="rating"
+															render={({ field }) => (
+																<FormItem>
+																	<FormControl>
+																		<Input
+																			{...field}
+																			id="rating"
+																			type="text"
+																			className="w-full"
+																		/>
+																	</FormControl>
+																</FormItem>
+															)}
+														></FormField>
+													</TableCell>
+												</TableRow>
+											</TableBody>
+										</Table>
+									</CardContent>
+								</Card>
+								{/* //* Image */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Image</CardTitle>
+										<CardDescription>
+											The image is not mandatory, but you can always paste some
+											URL where you have the image.
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<Label htmlFor="image">
+											What's the image of your recipe?
+										</Label>
+										<Input
+											id="image"
+											type="text"
+											className="w-full"
+											placeholder="https://image-example.com"
+										/>
+									</CardContent>
+								</Card>
+								<Button type="submit">Submit</Button>
+							</form>
+						</Form>
+					</TabsContent>
+				</Tabs>
 			</main>
 		</QueryClientProvider>
 	);
