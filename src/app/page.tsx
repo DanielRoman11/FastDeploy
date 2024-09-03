@@ -41,11 +41,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { useFieldArray } from "react-hook-form";
 import { Toaster } from "@/components/ui/toaster";
+import RecipeCard from "@/components/recipe/RecipeCard";
 
 export const queryClient = new QueryClient();
 
 export default function Home() {
-	const { form, onSubmit, recipes } = useRecipe();
+	const { form, recipes, onSubmit, onDelete } = useRecipe();
 
 	//? INGREDIENTS FORM STATES
 	const { fields: fieldsIngredients, append: appendIngredients } =
@@ -78,12 +79,13 @@ export default function Home() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<main>
-				<Tabs defaultValue="recipe_form">
+				<Tabs defaultValue="recipes">
 					<TabsList className="w-full flex justify-center items-center mx-auto">
 						<TabsTrigger value="recipes">All Recipes</TabsTrigger>
 						<TabsTrigger value="recipe_form">Create New Recipe</TabsTrigger>
 					</TabsList>
-					<TabsContent value="recipes">
+					<TabsContent value="recipes" className="gap-4 grid">
+						<RecipeCard recipes={recipes} onDelete={onDelete} />
 						<RecipeTable recipes={recipes} />
 					</TabsContent>
 					<TabsContent value="recipe_form">
@@ -380,7 +382,7 @@ export default function Home() {
 																		<Input
 																			{...field}
 																			id="rating"
-																			type="text"
+																			type="number"
 																			className="w-full"
 																		/>
 																	</FormControl>

@@ -10,7 +10,7 @@ export interface Recipe {
 	steps: Item[];
 	calories?: string;
 	stimated_price: string;
-	rating: string;
+	rating: number;
 	image?: string;
 }
 

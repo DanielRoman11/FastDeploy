@@ -1,11 +1,13 @@
 import { z } from "zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getRecipes, postRecipe } from "@/lib/api/recipes";
+import { deleteRecipe, getRecipes, postRecipe } from "@/lib/api/recipes";
 import { queryClient } from "../page";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatTimeString } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { Recipe } from "../interfaces/recipe.input";
+import { title } from "process";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "You must provided a name" }),
@@ -38,7 +40,7 @@ const formSchema = z.object({
 	stimated_price: z
 		.string()
 		.min(1, { message: "You have to insert a stimated price." }),
-	rating: z.string().min(1, { message: "You have to insert a rating." }),
+	rating: z.number().min(1).max(5, "Max value is 5"),
 	image: z.string().optional(),
 });
 
@@ -68,7 +70,7 @@ export function useRecipe() {
 			],
 			calories: "",
 			stimated_price: "",
-			rating: "",
+			rating: 1,
 			image: "",
 		},
 	});
@@ -85,11 +87,15 @@ export function useRecipe() {
 		queryClient
 	);
 
+	//* POST REQUEST
 	const createMutation = useMutation(
 		{
 			mutationFn: postRecipe,
 			onSuccess: (data) => {
-				queryClient.setQueryData(["recipes"], (old: any) => [...old, data]);
+				queryClient.setQueryData(["recipes"], (old: Recipe[]) => [
+					...old,
+					data,
+				]);
 				toast({
 					title: "New Recipe Created.",
 					description: "You create a NEW recipe.",
@@ -118,8 +124,30 @@ export function useRecipe() {
 		});
 	}
 
+	//* DELETE REQUEST
+	const deleteMutation = useMutation(
+		{
+			mutationFn: deleteRecipe,
+			onSuccess: (id: number) => {
+				queryClient.setQueryData(["recipes"], (old: Recipe[]) =>
+					old.filter((recipe) => recipe.id !== id)
+				);
+				toast({
+					title: "Recipe Deleted.",
+					description: "You just delete a recipe.",
+				});
+			},
+		},
+		queryClient
+	);
+
+	function onDelete(id: number) {
+		deleteMutation.mutate(id);
+	}
+
 	return {
 		onSubmit,
+		onDelete,
 		form,
 		recipes,
 		error,

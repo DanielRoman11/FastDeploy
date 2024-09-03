@@ -22,6 +22,7 @@ export async function patchRecipe(id: Recipe, input: Partial<Recipe>) {
 }
 
 export async function deleteRecipe(id: number) {
-	const response = await axiosInstance.delete(`/recipes/${id}`);
-	return await response.data;
+	const response = await axiosInstance.delete(`/recipe/${id}`);
+	await response.data;
+	return id;
 }
