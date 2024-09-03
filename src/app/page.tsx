@@ -40,11 +40,12 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useFieldArray } from "react-hook-form";
+import { Toaster } from "@/components/ui/toaster";
 
 export const queryClient = new QueryClient();
 
 export default function Home() {
-	const { form, onSubmit, createMutation, recipes } = useRecipe();
+	const { form, onSubmit, recipes } = useRecipe();
 
 	//? INGREDIENTS FORM STATES
 	const { fields: fieldsIngredients, append: appendIngredients } =
@@ -90,7 +91,7 @@ export default function Home() {
 							<form
 								onSubmit={form.handleSubmit(onSubmit)}
 								id="recipeForm"
-								className="*:my-4 *:mx-2"
+								className="*:my-4 *:mx-2 max-w-2xl mx-auto"
 							>
 								{/* //* Name, Description and Type */}
 								<Card>
@@ -278,7 +279,7 @@ export default function Home() {
 												Select all the ingredients you need.
 											</CardDescription>
 											<RecipeItemForm
-												label="Ingredient"
+												label="Ingredients"
 												form={form}
 												handleClickItemForm={handleClickIngredientItemForm}
 												rows={fieldsIngredients}
@@ -383,6 +384,7 @@ export default function Home() {
 																			className="w-full"
 																		/>
 																	</FormControl>
+																	<FormMessage />
 																</FormItem>
 															)}
 														></FormField>
@@ -405,20 +407,35 @@ export default function Home() {
 										<Label htmlFor="image">
 											What's the image of your recipe?
 										</Label>
-										<Input
-											id="image"
-											type="text"
-											className="w-full"
-											placeholder="https://image-example.com"
-										/>
+										<FormField
+											control={form.control}
+											name="image"
+											render={({ field }) => (
+												<FormItem>
+													<FormControl>
+														<Input
+															{...field}
+															id="image"
+															type="text"
+															className="w-full"
+															placeholder="https://image-example.com"
+														/>
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										></FormField>
 									</CardContent>
 								</Card>
-								<Button type="submit">Submit</Button>
+								<div className="flex justify-center">
+									<Button type="submit">Submit</Button>
+								</div>
 							</form>
 						</Form>
 					</TabsContent>
 				</Tabs>
 			</main>
+			<Toaster />
 		</QueryClientProvider>
 	);
 }

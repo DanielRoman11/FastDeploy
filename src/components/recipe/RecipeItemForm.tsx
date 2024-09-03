@@ -47,7 +47,7 @@ export default function RecipeItemForm({
 									<TableCell>
 										<FormField
 											control={form.control}
-											name={`${label}.${index}.name`}
+											name={`${label.toLocaleLowerCase()}.${index}.name`}
 											render={({ field }) => (
 												<FormItem>
 													<FormLabel htmlFor={`${label}-${index}`} className="sr-only">

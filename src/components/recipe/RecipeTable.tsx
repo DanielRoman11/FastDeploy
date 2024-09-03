@@ -1,13 +1,20 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+	Table,
+	TableBody,
+	TableCaption,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import ItemDialog from "@/components/recipe/RecipeItemDialog";
 import Image from "next/image";
 
 import { Recipe } from "@/app/interfaces/recipe.input";
 
-
 export default function RecipeTable({ recipes }: { recipes: any }) {
 	return (
-		<Table>
+		<Table className="max-w-2xl mx-auto">
 			<TableCaption>A list of recent recipes.</TableCaption>
 			<TableHeader>
 				<TableRow>
@@ -26,27 +33,38 @@ export default function RecipeTable({ recipes }: { recipes: any }) {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{recipes && recipes.map((recipe: Recipe) =>
-				(
-					<TableRow key={recipe.id}>
-						<TableCell className="font-medium">{recipe.name}</TableCell>
-						<TableCell>{recipe.description}</TableCell>
-						<TableCell>{recipe.cooking_time}</TableCell>
-						<TableCell>{recipe.preparation_time}</TableCell>
-						<TableCell>{recipe.type}</TableCell>
-						<TableCell><ItemDialog data={recipe.ingredients} label="Ingredients" /></TableCell>
-						<TableCell><ItemDialog data={recipe.tools} label="Tools" /></TableCell>
-						<TableCell><ItemDialog data={recipe.steps} label="Steps" /></TableCell>
-						<TableCell>{recipe.calories}</TableCell>
-						<TableCell>{recipe.stimated_price}</TableCell>
-						<TableCell>{recipe.rating}</TableCell>
-						<TableCell>{recipe.image &&
-							(<Image className="size-16 object-contain" src={recipe.image} alt={recipe.name}></Image>)
-						}</TableCell>
-					</TableRow>
-				)
-				)}
+				{recipes &&
+					recipes.map((recipe: Recipe) => (
+						<TableRow key={recipe.id}>
+							<TableCell className="font-medium">{recipe.name}</TableCell>
+							<TableCell>{recipe.description}</TableCell>
+							<TableCell>{recipe.cooking_time}</TableCell>
+							<TableCell>{recipe.preparation_time}</TableCell>
+							<TableCell>{recipe.type}</TableCell>
+							<TableCell>
+								<ItemDialog data={recipe.ingredients} label="Ingredients" />
+							</TableCell>
+							<TableCell>
+								<ItemDialog data={recipe.tools} label="Tools" />
+							</TableCell>
+							<TableCell>
+								<ItemDialog data={recipe.steps} label="Steps" />
+							</TableCell>
+							<TableCell>{recipe.calories}</TableCell>
+							<TableCell>{recipe.stimated_price}</TableCell>
+							<TableCell>{recipe.rating}</TableCell>
+							<TableCell>
+								{recipe.image && (
+									<Image
+										className="size-16 object-contain"
+										src={recipe.image}
+										alt={recipe.name}
+									></Image>
+								)}
+							</TableCell>
+						</TableRow>
+					))}
 			</TableBody>
 		</Table>
-	)
+	);
 }

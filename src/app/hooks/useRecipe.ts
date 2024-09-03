@@ -4,19 +4,21 @@ import { getRecipes, postRecipe } from "@/lib/api/recipes";
 import { queryClient } from "../page";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { formatTimeString } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "You must provided a name" }),
-	description: z
-		.string()
-		.optional(),
+	description: z.string().optional(),
 	cooking_time: z.string().min(6, {
 		message: "You must provided a cooking time in HH:MM:SS format.",
 	}),
 	preparation_time: z.string().min(6, {
 		message: "You must provided a preparation time in HH:MM:SS format.",
 	}),
-	type: z.string({ message: "You must provided a type for the recipe." }),
+	type: z
+		.string()
+		.min(4, { message: "You must provided a type for the recipe." }),
 	ingredients: z.array(
 		z.object({
 			name: z.string().min(1, "You must provide al least one ingredient."),
@@ -44,45 +46,32 @@ export function useRecipe() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			name: "Carrot Cake",
+			name: "",
 			description: "",
-			cooking_time: "000100",
-			preparation_time: "010000",
-			type: "Dessert",
+			cooking_time: "",
+			preparation_time: "",
+			type: "",
 			ingredients: [
 				{
-					name: "Carrot",
-				},
-				{
-					name: "Milk",
+					name: "",
 				},
 			],
 			tools: [
 				{
-					name: "Shaker",
-				},
-				{
-					name: "Spoon",
+					name: "",
 				},
 			],
 			steps: [
 				{
-					name: "Cut the carrot in long pieces.",
-				},
-				{
-					name: "Mix the cutted carrots with the milk.",
+					name: "",
 				},
 			],
-			calories: "1.0",
-			stimated_price: "500.50",
-			rating: "3",
+			calories: "",
+			stimated_price: "",
+			rating: "",
 			image: "",
 		},
 	});
-
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
-	}
 
 	const {
 		data: recipes,
@@ -101,10 +90,33 @@ export function useRecipe() {
 			mutationFn: postRecipe,
 			onSuccess: (data) => {
 				queryClient.setQueryData(["recipes"], (old: any) => [...old, data]);
+				toast({
+					title: "New Recipe Created.",
+					description: "You create a NEW recipe.",
+				});
+				form.reset();
 			},
 		},
 		queryClient
 	);
+
+	function onSubmit(values: z.infer<typeof formSchema>) {
+		const cooking_time = formatTimeString(values.cooking_time);
+		const preparation_time = formatTimeString(values.preparation_time);
+
+		createMutation.mutate({
+			...values,
+			description:
+				values.description && values.description !== ""
+					? values.description
+					: undefined,
+			calories:
+				values.calories && values.calories !== "" ? values.calories : undefined,
+			image: values.image && values.image !== "" ? values.image : undefined,
+			cooking_time,
+			preparation_time,
+		});
+	}
 
 	return {
 		onSubmit,
