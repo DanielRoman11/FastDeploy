@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  ValidationPipe,
 } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';

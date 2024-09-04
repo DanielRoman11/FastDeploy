@@ -57,8 +57,8 @@ export class Recipe {
   @Column('decimal')
   stimated_price: string;
 
-  @Column('decimal')
-  rating: string;
+  @Column()
+  rating: number;
 
   @Column({ nullable: true })
   image?: string;

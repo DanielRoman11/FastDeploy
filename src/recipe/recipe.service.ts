@@ -28,10 +28,13 @@ export class RecipeService {
 
   async update(id: number, updateRecipeDto: UpdateRecipeDto) {
     const initial_recipe = await this.findOne(id);
-    return await this.recipeRepo.update(initial_recipe, updateRecipeDto);
+    return await this.recipeRepo.save({
+      ...initial_recipe,
+      ...updateRecipeDto,
+    });
   }
 
-  remove(id: number) {
-    return this.recipeRepo.delete(id);
+  async remove(id: number) {
+    return await this.recipeRepo.delete(id);
   }
 }

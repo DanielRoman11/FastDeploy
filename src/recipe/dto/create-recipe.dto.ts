@@ -9,6 +9,9 @@ import {
   Length,
   ArrayMinSize,
   ValidateNested,
+  IsNumber,
+  IsPositive,
+  ValidateIf,
 } from 'class-validator';
 import { CreateItemDto } from './create-items.dto';
 import { IsTime } from '../../common/validators/is-time.decorator';
@@ -74,11 +77,13 @@ export class CreateRecipeDto {
   stimated_price: string;
 
   @IsNotEmpty()
-  @IsString()
-  @Transform(({ value }: { value: string }) => value.trim())
-  @IsDecimal()
-  @IsPositiveDecimal()
-  rating: string;
+  @IsNumber()
+  @IsPositive()
+  @ValidateIf((value: number) => value <= 5, {
+    message: 'Rating must be less than 5',
+    always: true,
+  })
+  rating: number;
 
   @IsOptional()
   @IsString()
