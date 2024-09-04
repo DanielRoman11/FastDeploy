@@ -1,6 +1,6 @@
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Item } from "@/app/interfaces/recipe.input"
+import { Item } from "@/interfaces/recipe.input"
 
 export default function ItemDialog({ label, data }: { label: string, data: Item[] }) {
 	return (

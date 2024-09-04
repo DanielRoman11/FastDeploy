@@ -5,7 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Recipe } from "@/app/interfaces/recipe.input";
+import { Recipe } from "@/interfaces/recipe.input";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,31 +14,74 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { PencilIcon, StarIcon, X } from "lucide-react";
 import ItemDialog from "./RecipeItemDialog";
+import RecipeForm from "./RecipeForm";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 
 export default function RecipeCard({
 	recipes,
+	form,
+	onSubmit,
 	onDelete,
 }: {
 	recipes: Recipe[];
 	onDelete: (id: number) => void;
+	form: any;
+	onSubmit: (values: any) => void;
 }) {
-	const a: number = 5;
-
 	return (
 		<>
-			<article className="flex justify-center items-center">
+			<article className="flex flex-wrap gap-4 justify-center items-center">
 				{recipes &&
 					recipes.map((recipe) => (
 						<Card key={recipe.id}>
 							<CardHeader className="relative">
-								<X
-									onClick={() => {
-										recipe.id && onDelete(recipe.id);
-									}}
-									className="absolute w-5 top-1 right-2 text-muted-foreground cursor-pointer z-10"
-								/>
+								<AlertDialog>
+									<AlertDialogTrigger>
+										<X className="absolute w-5 top-1 right-2 text-muted-foreground cursor-pointer z-10" />
+									</AlertDialogTrigger>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>
+												Are you absolutely sure?
+											</AlertDialogTitle>
+											<AlertDialogDescription>
+												This action cannot be undone. This will permanently
+												delete your account and remove your data from our
+												servers.
+											</AlertDialogDescription>
+										</AlertDialogHeader>
+										<AlertDialogFooter>
+											<AlertDialogCancel>Cancel</AlertDialogCancel>
+											<AlertDialogAction
+												onClick={() => {
+													recipe.id && onDelete(recipe.id);
+												}}
+											>
+												Continue
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
 								<div className="flex justify-between">
 									<Badge className="w-fit">{recipe.type}</Badge>
 									{recipe.rating && (
@@ -51,7 +94,28 @@ export default function RecipeCard({
 								</div>
 								<CardTitle className="flex items-center gap-2">
 									{recipe.name}{" "}
-									<PencilIcon className="size-3.5 text-muted-foreground cursor-pointer" />
+									<Dialog>
+										<DialogTrigger>
+											<PencilIcon className="size-3.5 text-muted-foreground cursor-pointer" />
+										</DialogTrigger>
+										<DialogContent className="h-[32rem] w-fit overflow-y-scroll">
+											<DialogHeader>
+												<DialogTitle className="font-semibold text-primary text-balance text-sm">
+													Editing: "
+													<span className="text-xl">{recipe.name}</span>"
+												</DialogTitle>
+												<DialogDescription className="text-sm text-pretty">
+													Personalize your recipes to suit your unique tastes
+													and preferences.
+												</DialogDescription>
+											</DialogHeader>
+											<RecipeForm
+												form={form}
+												onSubmit={onSubmit}
+												selectedRecipe={recipe}
+											/>
+										</DialogContent>
+									</Dialog>
 								</CardTitle>
 								<CardDescription>{recipe.description}</CardDescription>
 								<Image

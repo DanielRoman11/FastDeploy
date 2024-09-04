@@ -10,7 +10,7 @@ import {
 import ItemDialog from "@/components/recipe/RecipeItemDialog";
 import Image from "next/image";
 
-import { Recipe } from "@/app/interfaces/recipe.input";
+import { Recipe } from "@/interfaces/recipe.input";
 import { Card, CardContent } from "../ui/card";
 
 export default function RecipeTable({ recipes }: { recipes: any }) {

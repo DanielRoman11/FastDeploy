@@ -1,4 +1,4 @@
-import { Recipe } from "@/app/interfaces/recipe.input";
+import { Recipe } from "@/interfaces/recipe.input";
 import { axiosInstance } from "../axios";
 
 export async function postRecipe(input: Recipe) {
@@ -12,12 +12,12 @@ export async function getRecipes() {
 }
 
 export async function getRecipe(id: number) {
-	const response = await axiosInstance.get(`/recipes/${id}`);
+	const response = await axiosInstance.get(`/recipe/${id}`);
 	return await response.data;
 }
 
-export async function patchRecipe(id: Recipe, input: Partial<Recipe>) {
-	const response = await axiosInstance.patch(`/recipes/${id}`, input);
+export async function patchRecipe(input: Partial<Recipe>): Promise<Recipe> {
+	const response = await axiosInstance.patch(`/recipe/${input.id}`, input);
 	return await response.data;
 }
 
