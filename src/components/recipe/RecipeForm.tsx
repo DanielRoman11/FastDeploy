@@ -81,6 +81,7 @@ export default function RecipeForm({
 					description: selectedRecipe.description
 						? selectedRecipe.description
 						: "",
+					calories: selectedRecipe.calories ? selectedRecipe.calories : "",
 					image: selectedRecipe.image ? selectedRecipe.image : "",
 					rating: selectedRecipe.rating.toString(),
 			  })

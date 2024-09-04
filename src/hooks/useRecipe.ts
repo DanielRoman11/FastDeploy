@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formatTimeString } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { Recipe } from "@/interfaces/recipe.input";
+import { useState } from "react";
 
 export const formSchema = z.object({
 	name: z.string().min(1, { message: "Provide a name" }),
@@ -45,6 +46,12 @@ export const formSchema = z.object({
 });
 
 export function useRecipe() {
+	const [openDialog, setOpenDialog] = useState(false);
+
+	function handleOpenDialog() {
+		setOpenDialog(!openDialog);
+	}
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -124,7 +131,6 @@ export function useRecipe() {
 		} else {
 			updateMutation.mutate({
 				id: selectedRecipe.id,
-				...selectedRecipe,
 				...values,
 				description:
 					values.description && values.description !== ""
@@ -150,6 +156,7 @@ export function useRecipe() {
 				queryClient.setQueryData(["recipes"], (old: Recipe[]) =>
 					old.map((recipe) => (recipe.id === values.id ? values : recipe))
 				);
+				setOpenDialog(false);
 			},
 		},
 		queryClient
@@ -182,5 +189,7 @@ export function useRecipe() {
 		form,
 		recipes,
 		createMutation,
+		openDialog,
+		handleOpenDialog,
 	};
 }

@@ -42,11 +42,15 @@ export default function RecipeCard({
 	form,
 	onSubmit,
 	onDelete,
+	openDialog,
+	handleOpenDialog,
 }: {
-	recipes: Recipe[];
-	onDelete: (id: number) => void;
 	form: any;
+	recipes: Recipe[];
+	openDialog: boolean;
+	onDelete: (id: number) => void;
 	onSubmit: (values: any) => void;
+	handleOpenDialog: () => void;
 }) {
 	return (
 		<>
@@ -94,15 +98,14 @@ export default function RecipeCard({
 								</div>
 								<CardTitle className="flex items-center gap-2">
 									{recipe.name}{" "}
-									<Dialog>
+									<Dialog open={openDialog} onOpenChange={handleOpenDialog}>
 										<DialogTrigger>
 											<PencilIcon className="size-3.5 text-muted-foreground cursor-pointer" />
 										</DialogTrigger>
 										<DialogContent className="h-[32rem] w-fit overflow-y-scroll">
 											<DialogHeader>
-												<DialogTitle className="font-semibold text-primary text-balance text-sm">
-													Editing: "
-													<span className="text-xl">{recipe.name}</span>"
+												<DialogTitle className="font-semibold text-primary text-balance text-xl">
+													{recipe.name}
 												</DialogTitle>
 												<DialogDescription className="text-sm text-pretty">
 													Personalize your recipes to suit your unique tastes

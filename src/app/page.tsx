@@ -11,8 +11,8 @@ import RecipeForm from "@/components/recipe/RecipeForm";
 export const queryClient = new QueryClient();
 
 export default function Home() {
-	const { form, recipes, onSubmit, onDelete } = useRecipe();
-
+	const { form, recipes, openDialog, onSubmit, onDelete, handleOpenDialog } =
+		useRecipe();
 	return (
 		<QueryClientProvider client={queryClient}>
 			<main>
@@ -27,6 +27,8 @@ export default function Home() {
 							onDelete={onDelete}
 							form={form}
 							onSubmit={onSubmit}
+							openDialog={openDialog}
+							handleOpenDialog={handleOpenDialog}
 						/>
 					</TabsContent>
 					<TabsContent value="recipe_form" className="overflow-hidden">
