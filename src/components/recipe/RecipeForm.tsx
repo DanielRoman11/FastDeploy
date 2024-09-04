@@ -38,7 +38,7 @@ import { useEffect } from "react";
 export default function RecipeForm({
 	form,
 	onSubmit,
-	selectedRecipe,
+	selectedRecipe = null,
 }: {
 	form: any;
 	onSubmit: (values: Recipe, selectedRecipe?: Recipe | null) => void;
@@ -73,18 +73,44 @@ export default function RecipeForm({
 	}
 
 	useEffect(() => {
-		selectedRecipe &&
-			form.reset({
-				...selectedRecipe,
-				cooking_time: selectedRecipe.cooking_time.replaceAll(":", ""),
-				preparation_time: selectedRecipe.preparation_time.replaceAll(":", ""),
-				description: selectedRecipe.description
-					? selectedRecipe.description
-					: "",
-				image: selectedRecipe.image ? selectedRecipe.image : "",
-				rating: selectedRecipe.rating.toString(),
-			});
-	}, [selectedRecipe, form]);
+		selectedRecipe
+			? form.reset({
+					...selectedRecipe,
+					cooking_time: selectedRecipe.cooking_time.replaceAll(":", ""),
+					preparation_time: selectedRecipe.preparation_time.replaceAll(":", ""),
+					description: selectedRecipe.description
+						? selectedRecipe.description
+						: "",
+					image: selectedRecipe.image ? selectedRecipe.image : "",
+					rating: selectedRecipe.rating.toString(),
+			  })
+			: form.reset({
+					name: "",
+					description: "",
+					cooking_time: "",
+					preparation_time: "",
+					type: "",
+					ingredients: [
+						{
+							name: "",
+						},
+					],
+					tools: [
+						{
+							name: "",
+						},
+					],
+					steps: [
+						{
+							name: "",
+						},
+					],
+					calories: "",
+					stimated_price: "",
+					rating: "1",
+					image: "",
+			  });
+	}, [selectedRecipe]);
 
 	return (
 		<Form {...form}>
