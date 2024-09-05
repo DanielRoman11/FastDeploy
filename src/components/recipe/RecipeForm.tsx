@@ -28,6 +28,15 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -156,29 +165,6 @@ export default function RecipeForm({
 							<div>
 								<FormField
 									control={form.control}
-									name="type"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>
-												What's the type of food your recipe is?
-											</FormLabel>
-											<FormControl>
-												<Input
-													{...field}
-													name={field.name}
-													type="text"
-													className="w-full"
-													placeholder="Ex. Dessert, Breakfast, etc..."
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								></FormField>
-							</div>
-							<div>
-								<FormField
-									control={form.control}
 									name="description"
 									render={({ field }) => (
 										<FormItem>
@@ -191,6 +177,59 @@ export default function RecipeForm({
 													name={field.name}
 													className="min-h-32"
 												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								></FormField>
+							</div>
+							<div>
+								<FormField
+									control={form.control}
+									name="type"
+									render={({ field }) => (
+										<FormItem>
+											<p>What's the type of food your recipe is?</p>
+											<FormControl>
+												<DropdownMenu>
+													<DropdownMenuTrigger asChild>
+														<Button
+															variant="outline"
+															className="block mx-auto sm:min-w-[300px]"
+														>
+															{field.value !== "" ? field.value : "Recipe Type"}
+														</Button>
+													</DropdownMenuTrigger>
+													<DropdownMenuContent className="w-56">
+														<DropdownMenuLabel>
+															Select the type of you recipe.
+														</DropdownMenuLabel>
+														<DropdownMenuSeparator />
+														<DropdownMenuRadioGroup
+															value={field.value}
+															onValueChange={field.onChange}
+														>
+															<DropdownMenuRadioItem value="Breakfast">
+																Breakfast
+															</DropdownMenuRadioItem>
+															<DropdownMenuRadioItem value="Lunch">
+																Lunch
+															</DropdownMenuRadioItem>
+															<DropdownMenuRadioItem value="Dinner">
+																Dinner
+															</DropdownMenuRadioItem>
+															<DropdownMenuRadioItem value="Dessert">
+																Dessert
+															</DropdownMenuRadioItem>
+															<DropdownMenuRadioItem value="Drink">
+																Drink
+															</DropdownMenuRadioItem>
+															<DropdownMenuRadioItem value="Snack">
+																Snack
+															</DropdownMenuRadioItem>
+														</DropdownMenuRadioGroup>
+													</DropdownMenuContent>
+												</DropdownMenu>
 											</FormControl>
 											<FormMessage />
 										</FormItem>

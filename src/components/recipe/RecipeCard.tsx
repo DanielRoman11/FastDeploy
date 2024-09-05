@@ -40,17 +40,19 @@ import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 export default function RecipeCard({
 	recipes,
 	form,
-	onSubmit,
-	onDelete,
+	selRecipe,
 	openDialog,
+	onDelete,
+	onSubmit,
 	handleOpenDialog,
 }: {
 	form: any;
 	recipes: Recipe[];
+	selRecipe: Recipe | null;
 	openDialog: boolean;
 	onDelete: (id: number) => void;
 	onSubmit: (values: any) => void;
-	handleOpenDialog: () => void;
+	handleOpenDialog: (recipe: Recipe) => void;
 }) {
 	return (
 		<>
@@ -90,7 +92,7 @@ export default function RecipeCard({
 									<Badge className="w-fit">{recipe.type}</Badge>
 									{recipe.rating && (
 										<div className="flex">
-											{[...Array(Number(recipe.rating))].map((x, i) => (
+											{[...Array(Number(recipe.rating))].map((rating, i) => (
 												<StarIcon className="text-primary" key={i} />
 											))}
 										</div>
@@ -99,7 +101,8 @@ export default function RecipeCard({
 								<CardTitle className="flex items-center gap-2">
 									{recipe.name}{" "}
 									<Dialog
-										onOpenChange={handleOpenDialog}
+										onOpenChange={() => handleOpenDialog(recipe)}
+										open={openDialog}
 									>
 										<DialogTrigger>
 											<PencilIcon className="size-3.5 text-muted-foreground cursor-pointer" />
@@ -117,7 +120,7 @@ export default function RecipeCard({
 											<RecipeForm
 												form={form}
 												onSubmit={onSubmit}
-												selectedRecipe={recipe}
+												selectedRecipe={selRecipe}
 											/>
 										</DialogContent>
 									</Dialog>

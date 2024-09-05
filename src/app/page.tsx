@@ -11,8 +11,15 @@ import RecipeForm from "@/components/recipe/RecipeForm";
 export const queryClient = new QueryClient();
 
 export default function Home() {
-	const { form, recipes, openDialog, onSubmit, onDelete, handleOpenDialog } =
-		useRecipe();
+	const {
+		form,
+		recipes,
+		openDialog,
+		selRecipe,
+		onSubmit,
+		onDelete,
+		handleOpenDialog,
+	} = useRecipe();
 	return (
 		<QueryClientProvider client={queryClient}>
 			<main>
@@ -26,6 +33,7 @@ export default function Home() {
 							recipes={recipes}
 							onDelete={onDelete}
 							form={form}
+							selRecipe={selRecipe}
 							onSubmit={onSubmit}
 							openDialog={openDialog}
 							handleOpenDialog={handleOpenDialog}
