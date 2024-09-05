@@ -48,7 +48,7 @@ export default function RecipeCard({
 }: {
 	form: any;
 	recipes: Recipe[];
-	selRecipe: Recipe | null;
+	selRecipe: Recipe | null,
 	openDialog: boolean;
 	onDelete: (id: number) => void;
 	onSubmit: (values: any) => void;
@@ -56,7 +56,7 @@ export default function RecipeCard({
 }) {
 	return (
 		<>
-			<article className="flex justify-center items-center p-2 sm:p-5 gap-4 *:h-[500px] *:max-w-md">
+			<article className="flex flex-wrap justify-center items-center p-2 sm:p-5 gap-4 *:h-[500px] *:max-w-md">
 				{recipes &&
 					recipes.map((recipe) => (
 						<Card key={recipe.id}>
@@ -107,7 +107,7 @@ export default function RecipeCard({
 										<DialogTrigger>
 											<PencilIcon className="size-3.5 text-muted-foreground cursor-pointer" />
 										</DialogTrigger>
-										<DialogContent className="h-[32rem] w-fit overflow-y-scroll">
+										<DialogContent className="h-[32rem] overflow-y-scroll">
 											<DialogHeader>
 												<DialogTitle className="font-semibold text-primary text-balance text-xl">
 													{recipe.name}

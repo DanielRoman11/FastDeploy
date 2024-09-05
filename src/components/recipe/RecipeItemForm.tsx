@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { Plus } from "lucide-react";
 import {
 	FormControl,
 	FormField,
@@ -44,7 +44,7 @@ export default function RecipeItemForm({
 							{rows.map((row, index) => (
 								<TableRow key={index}>
 									<TableCell className="font-semibold">Name</TableCell>
-									<TableCell>
+									<TableCell className="w-4/5">
 										<FormField
 											control={form.control}
 											name={`${label.toLocaleLowerCase()}.${index}.name`}
@@ -78,7 +78,7 @@ export default function RecipeItemForm({
 						variant="default"
 						className="gap-1"
 					>
-						<PlusCircle className="size-4" />
+						<Plus className="size-4" />
 						Add Variant
 					</Button>
 				</CardFooter>
