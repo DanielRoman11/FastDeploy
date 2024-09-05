@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formatTimeString } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { Recipe } from "@/interfaces/recipe.input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const formSchema = z.object({
 	name: z.string().min(1, { message: "Provide a name" }),
@@ -156,6 +156,10 @@ export function useRecipe() {
 				queryClient.setQueryData(["recipes"], (old: Recipe[]) =>
 					old.map((recipe) => (recipe.id === values.id ? values : recipe))
 				);
+				toast({
+					title: "Recipe Updated.",
+					description: `You just update your recipe to "${values.name}".`,
+				});
 				setOpenDialog(false);
 			},
 		},

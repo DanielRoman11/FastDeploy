@@ -35,8 +35,8 @@ export default function Home() {
 						<RecipeForm form={form} onSubmit={onSubmit} />
 					</TabsContent>
 				</Tabs>
+				<Toaster />
 			</main>
-			<Toaster />
 		</QueryClientProvider>
 	);
 }

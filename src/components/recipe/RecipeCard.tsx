@@ -54,7 +54,7 @@ export default function RecipeCard({
 }) {
 	return (
 		<>
-			<article className="flex flex-wrap gap-4 justify-center items-center">
+			<article className="flex justify-center items-center p-2 sm:p-5 gap-4 *:h-[500px] *:max-w-md">
 				{recipes &&
 					recipes.map((recipe) => (
 						<Card key={recipe.id}>
@@ -98,7 +98,9 @@ export default function RecipeCard({
 								</div>
 								<CardTitle className="flex items-center gap-2">
 									{recipe.name}{" "}
-									<Dialog open={openDialog} onOpenChange={handleOpenDialog}>
+									<Dialog
+										onOpenChange={handleOpenDialog}
+									>
 										<DialogTrigger>
 											<PencilIcon className="size-3.5 text-muted-foreground cursor-pointer" />
 										</DialogTrigger>
@@ -120,7 +122,9 @@ export default function RecipeCard({
 										</DialogContent>
 									</Dialog>
 								</CardTitle>
-								<CardDescription>{recipe.description}</CardDescription>
+								<CardDescription className="h-10 line-clamp-2">
+									{recipe.description}
+								</CardDescription>
 								<Image
 									src={
 										recipe.image ??
