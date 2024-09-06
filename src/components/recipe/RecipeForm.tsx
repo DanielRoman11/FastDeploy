@@ -237,6 +237,9 @@ export default function RecipeForm({
 																<DropdownMenuRadioItem value="Snack">
 																	Snack
 																</DropdownMenuRadioItem>
+																<DropdownMenuRadioItem value="Vegan">
+																	Vegan
+																</DropdownMenuRadioItem>
 															</DropdownMenuRadioGroup>
 														</DropdownMenuContent>
 													</DropdownMenu>
