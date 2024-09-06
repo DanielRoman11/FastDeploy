@@ -9,3 +9,9 @@ services:
       POSTGRES_USER: daker
       POSTGRES_PASSWORD: example
       POSTGRES_DB: recipe
+
+  redis:
+    image: redis:alpine
+    container_name: redis-cache
+    ports:
+      - '6379:6379'

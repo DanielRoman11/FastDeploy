@@ -12,22 +12,27 @@ import {
   IsNumber,
   IsPositive,
   ValidateIf,
+  IsEnum,
 } from 'class-validator';
 import { CreateItemDto } from './create-items.dto';
 import { IsTime } from '../../common/validators/is-time.decorator';
 import { IsPositiveDecimal } from '../../common/validators/is-positive-decimal.decorator';
+import { RecipeTypeEnum } from '../../common/entities/recipeType.enum';
 
 export class CreateRecipeDto {
   @IsNotEmpty()
   @IsString()
   @Length(5, 100)
-  @Transform(({ value }: { value: string }) => value.trim().toLocaleLowerCase())
+  @Transform(
+    ({ value }) =>
+      value.trim()[0].toUpperCase() + value.trim().toLowerCase().slice(1),
+  )
   name: string;
 
   @IsOptional()
   @IsString()
   @Length(5, 500)
-  @Transform(({ value }: { value: string }) => value.trim().toLocaleLowerCase())
+  @Transform(({ value }: { value: string }) => value.trim())
   description: string;
 
   @IsTime()
@@ -37,10 +42,12 @@ export class CreateRecipeDto {
   preparation_time: string;
 
   @IsNotEmpty()
-  @IsString()
-  @Length(5, 50)
-  @Transform(({ value }: { value: string }) => value.trim().toLocaleLowerCase())
-  type: string;
+  @Transform(
+    ({ value }) =>
+      value.trim()[0].toUpperCase() + value.trim().toLowerCase().slice(1),
+  )
+  @IsEnum(RecipeTypeEnum)
+  type: RecipeTypeEnum;
 
   @IsNotEmpty()
   @IsArray()

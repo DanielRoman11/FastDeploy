@@ -9,6 +9,7 @@ import {
 import { Ingredient } from './ingredient.entity';
 import { Tool } from './tools.entity';
 import { Step } from './steps.entity';
+import { RecipeTypeEnum } from '../../common/entities/recipeType.enum';
 
 @Entity()
 export class Recipe {
@@ -27,8 +28,8 @@ export class Recipe {
   @Column({ type: 'time' })
   preparation_time: string;
 
-  @Column()
-  type: string;
+  @Column({ type: 'enum', enum: RecipeTypeEnum })
+  type: RecipeTypeEnum;
 
   @ManyToMany(() => Ingredient, (ingredient) => ingredient.recipe, {
     cascade: true,
