@@ -24,7 +24,7 @@ export default function Home() {
 		<QueryClientProvider client={queryClient}>
 			<main>
 				<Tabs defaultValue="recipes">
-					<TabsList className="w-full flex justify-center items-center mx-auto">
+					<TabsList className="w-full rounded-none flex justify-center items-center mx-auto">
 						<TabsTrigger value="recipes">All Recipes</TabsTrigger>
 						<TabsTrigger value="recipe_form">Create New Recipe</TabsTrigger>
 					</TabsList>

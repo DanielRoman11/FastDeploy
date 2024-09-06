@@ -99,10 +99,7 @@ export default function RecipeCard({
 												))}
 												{[...Array(5 - Number(recipe.rating))].map(
 													(rating, i) => (
-														<StarIcon
-															className="text-primary"
-															key={i}
-														/>
+														<StarIcon className="text-primary" key={i} />
 													)
 												)}
 											</>
@@ -118,7 +115,7 @@ export default function RecipeCard({
 										<DialogTrigger>
 											<PencilIcon className="size-3.5 text-muted-foreground cursor-pointer" />
 										</DialogTrigger>
-										<DialogContent className="h-[45rem] !max-w-3xl overflow-y-scroll">
+										<DialogContent className="h-[45rem] !max-w-3xl overflow-y-scroll scroll-px-10">
 											<DialogHeader>
 												<DialogTitle className="font-semibold text-primary text-balance text-xl">
 													{recipe.name}

@@ -8,7 +8,7 @@ export async function postRecipe(input: Recipe) {
 
 export async function getRecipes() {
 	const response = await axiosInstance.get("/recipe");
-	return await response.data;
+	return await response.data.data;
 }
 
 export async function getRecipe(id: number) {
