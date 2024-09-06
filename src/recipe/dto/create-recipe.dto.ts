@@ -17,7 +17,7 @@ import {
 import { CreateItemDto } from './create-items.dto';
 import { IsTime } from '../../common/validators/is-time.decorator';
 import { IsPositiveDecimal } from '../../common/validators/is-positive-decimal.decorator';
-import { RecipeTypeEnum } from '../../common/entities/recipeType.enum';
+import { RecipeTypeEnum } from '../../common/enums/recipe.enum';
 
 export class CreateRecipeDto {
   @IsNotEmpty()

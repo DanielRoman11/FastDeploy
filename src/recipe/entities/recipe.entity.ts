@@ -1,15 +1,18 @@
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   Relation,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Ingredient } from './ingredient.entity';
 import { Tool } from './tools.entity';
 import { Step } from './steps.entity';
-import { RecipeTypeEnum } from '../../common/entities/recipeType.enum';
+import { RecipeTypeEnum } from '../../common/enums/recipe.enum';
 
 @Entity()
 export class Recipe {
@@ -63,4 +66,13 @@ export class Recipe {
 
   @Column({ nullable: true })
   image?: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

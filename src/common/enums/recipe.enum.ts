@@ -5,4 +5,12 @@ export enum RecipeTypeEnum {
   DESSERT = 'Dessert',
   DRINK = 'Drink',
   SNACK = 'Snack',
+	VEGAN = 'Vegan',
+}
+
+export enum RecipeDateEnum {
+  TODAY = 'today',
+  WEEK = 'week',
+  MONTH = 'month',
+  YEAR = 'year',
 }

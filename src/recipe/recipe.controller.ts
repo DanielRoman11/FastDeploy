@@ -7,10 +7,13 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { CacheKey } from '@nestjs/cache-manager';
+import { PaginatorDto } from '../common/paginator/dto/paginator.dto';
 
 @Controller('recipe')
 export class RecipeController {
@@ -22,11 +25,13 @@ export class RecipeController {
   }
 
   @Get()
-  findAll() {
-    return this.recipeService.findAll();
+  @CacheKey('recipes')
+  findAll(@Query() paginatorDto: PaginatorDto) {
+    return this.recipeService.findAllPaginated(paginatorDto);
   }
 
   @Get(':id')
+  @CacheKey('recipe')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.recipeService.findOne(+id);
   }

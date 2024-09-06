@@ -4,6 +4,9 @@ import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { constants } from '../common/constants';
+import { PaginatorDto } from '../common/paginator/dto/paginator.dto';
+import { paginate } from '../common/paginator/paginate';
+import { RecipeDateEnum } from 'src/common/enums/recipe.enum';
 
 @Injectable()
 export class RecipeService {
@@ -13,10 +16,6 @@ export class RecipeService {
   ) {}
   async create(createRecipeDto: CreateRecipeDto) {
     return await this.recipeRepo.save(createRecipeDto);
-  }
-
-  async findAll() {
-    return await this.recipeRepo.find();
   }
 
   async findOne(id: number) {
@@ -35,6 +34,46 @@ export class RecipeService {
   }
 
   async remove(id: number) {
-    return await this.recipeRepo.delete(id);
+    return await this.recipeRepo.softDelete(id);
+  }
+
+  private baseQuery() {
+    return this.recipeRepo
+      .createQueryBuilder('r')
+      .orderBy('r.createdAt', 'DESC');
+  }
+
+  private findAllFilteredByDate(recipeDate: RecipeDateEnum) {
+    const query = this.baseQuery();
+    const date = new Date().toISOString().slice(0, 10);
+    switch (recipeDate) {
+      case RecipeDateEnum.TODAY:
+        return query.where('r.createdAt >= :date', {
+          date,
+        });
+      case RecipeDateEnum.WEEK:
+        return query.where("r.createdAt >= Date(:date) - INTERVAL '7 DAY'", {
+          date,
+        });
+      case RecipeDateEnum.MONTH:
+        return query.where("r.createdAt >= Date(:date) - INTERVAL '1 MONTH'", {
+          date,
+        });
+      case RecipeDateEnum.YEAR:
+        return query.where("r.createdAt >= Date(:date) - INTERVAL '1 YEAR'", {
+          date,
+        });
+      default:
+        return query;
+    }
+  }
+
+	private
+
+  public async findAllPaginated(paginatorDto: PaginatorDto) {
+    const query = this.findAllFilteredByDate(<RecipeDateEnum>paginatorDto.date);
+    const page = isNaN(paginatorDto.page) ? null : paginatorDto.page;
+    const limit = isNaN(paginatorDto.limit) ? null : paginatorDto.limit;
+    return await paginate(query, page, limit);
   }
 }
