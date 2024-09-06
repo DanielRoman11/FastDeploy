@@ -493,7 +493,9 @@ export default function RecipeForm({
 					</Card>
 				</div>
 				<div className="md:col-span-2 flex justify-center items-center">
-					<Button type="submit" className="w-fit min-w-72">{selectedRecipe ? "Edit" : "Submit"}</Button>
+					<Button type="submit" className="w-fit min-w-72">
+						{selectedRecipe ? "Edit" : "Submit"}
+					</Button>
 				</div>
 			</form>
 		</Form>

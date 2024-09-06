@@ -36,6 +36,7 @@ import { PencilIcon, StarIcon, X } from "lucide-react";
 import ItemDialog from "./RecipeItemDialog";
 import RecipeForm from "./RecipeForm";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import StarFillIcon from "../ui/icons/StarFillIcon";
 
 export default function RecipeCard({
 	recipes,
@@ -48,7 +49,7 @@ export default function RecipeCard({
 }: {
 	form: any;
 	recipes: Recipe[];
-	selRecipe: Recipe | null,
+	selRecipe: Recipe | null;
 	openDialog: boolean;
 	onDelete: (id: number) => void;
 	onSubmit: (values: any) => void;
@@ -92,9 +93,19 @@ export default function RecipeCard({
 									<Badge className="w-fit">{recipe.type}</Badge>
 									{recipe.rating && (
 										<div className="flex">
-											{[...Array(Number(recipe.rating))].map((rating, i) => (
-												<StarIcon className="text-primary" key={i} />
-											))}
+											<>
+												{[...Array(Number(recipe.rating))].map((rating, i) => (
+													<StarFillIcon className="text-primary" key={i} />
+												))}
+												{[...Array(5 - Number(recipe.rating))].map(
+													(rating, i) => (
+														<StarIcon
+															className="text-primary"
+															key={i}
+														/>
+													)
+												)}
+											</>
 										</div>
 									)}
 								</div>
@@ -107,7 +118,7 @@ export default function RecipeCard({
 										<DialogTrigger>
 											<PencilIcon className="size-3.5 text-muted-foreground cursor-pointer" />
 										</DialogTrigger>
-										<DialogContent className="h-[32rem] overflow-y-scroll">
+										<DialogContent className="h-[45rem] !max-w-3xl overflow-y-scroll">
 											<DialogHeader>
 												<DialogTitle className="font-semibold text-primary text-balance text-xl">
 													{recipe.name}

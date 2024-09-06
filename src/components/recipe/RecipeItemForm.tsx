@@ -50,7 +50,10 @@ export default function RecipeItemForm({
 											name={`${label.toLocaleLowerCase()}.${index}.name`}
 											render={({ field }) => (
 												<FormItem>
-													<FormLabel htmlFor={`${label}-${index}`} className="sr-only">
+													<FormLabel
+														htmlFor={`${label}-${index}`}
+														className="sr-only"
+													>
 														name
 													</FormLabel>
 													<FormControl>
